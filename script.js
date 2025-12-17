@@ -1,19 +1,11 @@
-const daftarBarang = ["Magnet Non-Mentol", "Magnet Mentol", "Rotama SPR","Rotama Extra", "Amatoru"];
+const daftarBarang = ["Magnet Filter", "Magnet Mentol", "Rotama", "Amatoru", "SPR", "Bold", "Geboy"];
 let pesanan = {};
-const PIN_BENAR = ("1234","1111");
 
-function cekLogin() {
-    if (document.getElementById('pinInput').value === PIN_BENAR) {
-        document.getElementById('loginPage').style.display = 'none';
-        document.getElementById('mainContent').style.display = 'block';
-        renderItems();
-    } else {
-        document.getElementById('loginError').style.display = 'block';
-    }
-}
-
+// Fungsi Render dipanggil otomatis saat halaman dimuat
 function renderItems() {
     const container = document.getElementById('itemList');
+    container.innerHTML = ""; // Bersihkan container
+    
     daftarBarang.forEach(nama => {
         pesanan[nama] = { qty: 0, catatan: "" };
         const card = document.createElement('div');
@@ -52,6 +44,7 @@ function updateTotal() {
 function tampilkanHalamanPembayaran() {
     document.getElementById('mainContent').style.display = 'none';
     document.getElementById('paymentPage').style.display = 'block';
+    window.scrollTo(0, 0);
 }
 
 function kembaliKeUtama() {
@@ -64,7 +57,7 @@ function copyText(t) {
 }
 
 function kirimWhatsApp() {
-    const loc = document.getElementById('lokasi').value;
+    const loc = document.getElementById('lokasi').value.trim();
     if (!loc) return alert("Isi Lokasi Pengiriman!");
     
     let msg = `*PERMINTAAN BARANG*\n📍 *Tujuan:* ${loc}\n------------------\n`;
@@ -77,6 +70,11 @@ function kirimWhatsApp() {
     }
     if (!ada) return alert("Pilih barang!");
     
-    window.open(`https://wa.me/628123456789?text=${encodeURIComponent(msg)}`, '_blank');
+    const nomorAdmin = "628123456789"; // GANTI NOMOR ANDA DISINI
+    window.open(`https://wa.me/${nomorAdmin}?text=${encodeURIComponent(msg)}`, '_blank');
+    
     setTimeout(() => { if(confirm("Reset form?")) location.reload(); }, 1000);
-                                }
+}
+
+// Inisialisasi awal
+window.onload = renderItems;
