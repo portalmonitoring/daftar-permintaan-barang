@@ -1,86 +1,82 @@
 const daftarBarang = ["Magnet Non-Mentol", "Magnet Mentol", "Rotama SPR","Rotama Extra", "Amatoru"];
 let pesanan = {};
+const PIN_BENAR = ("1234","1111");
 
-// Fungsi untuk membangun tampilan barang
+function cekLogin() {
+    if (document.getElementById('pinInput').value === PIN_BENAR) {
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        renderItems();
+    } else {
+        document.getElementById('loginError').style.display = 'block';
+    }
+}
+
 function renderItems() {
     const container = document.getElementById('itemList');
-    
     daftarBarang.forEach(nama => {
         pesanan[nama] = { qty: 0, catatan: "" };
-
         const card = document.createElement('div');
         card.className = 'item-card';
         card.innerHTML = `
-            <div class="item-info">
-                <p class="item-name">${nama}</p>
-            </div>
-            
+            <div style="font-weight:bold; flex:1;">${nama}</div>
             <div class="controls">
                 <button class="btn-qty" onclick="ubahQty('${nama}', -1)">-</button>
                 <span class="qty-value" id="qty-${nama}">0 Bal</span>
                 <button class="btn-qty" onclick="ubahQty('${nama}', 1)">+</button>
             </div>
-
             <div class="note-box">
-                <input type="text" placeholder="Catatan untuk ${nama}..." oninput="updateCatatan('${nama}', this.value)">
-            </div>
-        `;
+                <input type="text" id="note-${nama}" placeholder="Catatan..." oninput="updateCatatan('${nama}', this.value)">
+            </div>`;
         container.appendChild(card);
     });
 }
 
-// Fungsi mengubah jumlah (qty)
 function ubahQty(nama, delta) {
-    let qtyBaru = pesanan[nama].qty + delta;
-    if (qtyBaru >= 0) {
-        pesanan[nama].qty = qtyBaru;
-        document.getElementById(`qty-${nama}`).innerText = qtyBaru + " Bal";
-        updateTotalLabel();
+    let q = pesanan[nama].qty + delta;
+    if (q >= 0) {
+        pesanan[nama].qty = q;
+        document.getElementById(`qty-${nama}`).innerText = q + " Bal";
+        updateTotal();
     }
 }
 
-// Fungsi memperbarui catatan
-function updateCatatan(nama, teks) {
-    pesanan[nama].catatan = teks;
+function updateCatatan(n, t) { pesanan[n].catatan = t; }
+
+function updateTotal() {
+    let t = 0;
+    for (let k in pesanan) t += pesanan[k].qty;
+    document.getElementById('totalLabel').innerText = `Kirim Pesanan (${t} Bal)`;
 }
 
-// Update teks pada tombol keranjang melayang
-function updateTotalLabel() {
-    let total = 0;
-    for (let key in pesanan) {
-        total += pesanan[key].qty;
-    }
-    document.getElementById('totalLabel').innerText = `Kirim Pesanan (${total} Bal)`;
+function tampilkanHalamanPembayaran() {
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('paymentPage').style.display = 'block';
 }
 
-// Fungsi kirim data ke WhatsApp
+function kembaliKeUtama() {
+    document.getElementById('paymentPage').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+}
+
+function copyText(t) {
+    navigator.clipboard.writeText(t).then(() => alert("Teks disalin: " + t));
+}
+
 function kirimWhatsApp() {
-    let isiPesan = "*PERMINTAAN BARANG BARU*\n";
-    isiPesan += "--------------------------\n\n";
-    let adaBarang = false;
-
-    for (let nama in pesanan) {
-        if (pesanan[nama].qty > 0) {
-            adaBarang = true;
-            isiPesan += `📦 *${nama}*: ${pesanan[nama].qty} Bal\n`;
-            if (pesanan[nama].catatan) {
-                isiPesan += `   _Catatan: ${pesanan[nama].catatan}_\n`;
-            }
-            isiPesan += `\n`;
+    const loc = document.getElementById('lokasi').value;
+    if (!loc) return alert("Isi Lokasi Pengiriman!");
+    
+    let msg = `*PERMINTAAN BARANG*\n📍 *Tujuan:* ${loc}\n------------------\n`;
+    let ada = false;
+    for (let n in pesanan) {
+        if (pesanan[n].qty > 0) {
+            ada = true;
+            msg += `📦 *${n}*: ${pesanan[n].qty} Bal\n${pesanan[n].catatan ? '   _Note: ' + pesanan[n].catatan + '_\n' : ''}`;
         }
     }
-
-    if (!adaBarang) {
-        alert("Silahkan tentukan jumlah barang (Bal) terlebih dahulu!");
-        return;
-    }
-
-    // GANTI NOMOR DI BAWAH INI (Gunakan kode negara, contoh 62812...)
-    const nomorAdmin = "628990813403"; 
-    const urlWA = `https://wa.me/${nomorAdmin}?text=${encodeURIComponent(isiPesan)}`;
+    if (!ada) return alert("Pilih barang!");
     
-    window.open(urlWA, '_blank');
+    window.open(`https://wa.me/628123456789?text=${encodeURIComponent(msg)}`, '_blank');
+    setTimeout(() => { if(confirm("Reset form?")) location.reload(); }, 1000);
 }
-
-// Jalankan fungsi render saat halaman dimuat
-window.onload = renderItems;
