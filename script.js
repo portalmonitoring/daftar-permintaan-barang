@@ -14,7 +14,7 @@ function renderItems() {
             <div style="font-weight:bold; flex:1;">${nama}</div>
             <div class="controls">
                 <button class="btn-qty" onclick="ubahQty('${nama}', -1)">-</button>
-                <span class="qty-value" id="qty-${nama}">0 Bal</span>
+                <span class="qty-value" id="qty-${nama}">0 Bks</span>
                 <button class="btn-qty" onclick="ubahQty('${nama}', 1)">+</button>
             </div>
             <div class="note-box">
@@ -28,7 +28,7 @@ function ubahQty(nama, delta) {
     let q = pesanan[nama].qty + delta;
     if (q >= 0) {
         pesanan[nama].qty = q;
-        document.getElementById(`qty-${nama}`).innerText = q + " Bal";
+        document.getElementById(`qty-${nama}`).innerText = q + " Bks";
         updateTotal();
     }
 }
@@ -38,7 +38,7 @@ function updateCatatan(n, t) { pesanan[n].catatan = t; }
 function updateTotal() {
     let t = 0;
     for (let k in pesanan) t += pesanan[k].qty;
-    document.getElementById('totalLabel').innerText = `Kirim Pesanan (${t} Bal)`;
+    document.getElementById('totalLabel').innerText = `Kirim Pesanan (${t} Bks)`;
 }
 
 function tampilkanHalamanPembayaran() {
@@ -65,7 +65,7 @@ function kirimWhatsApp() {
     for (let n in pesanan) {
         if (pesanan[n].qty > 0) {
             ada = true;
-            msg += `📦 *${n}*: ${pesanan[n].qty} Bal\n${pesanan[n].catatan ? '   _Note: ' + pesanan[n].catatan + '_\n' : ''}`;
+            msg += `📦 *${n}*: ${pesanan[n].qty} Bks\n${pesanan[n].catatan ? '   _Note: ' + pesanan[n].catatan + '_\n' : ''}`;
         }
     }
     if (!ada) return alert("Pilih barang!");
