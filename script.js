@@ -70,7 +70,7 @@ function kirimWhatsApp() {
     }
     if (!ada) return alert("Pilih barang!");
     
-    const nomorAdmin = "628123456789"; // GANTI NOMOR ANDA DISINI
+    const nomorAdmin = "628990813403"; // GANTI NOMOR ANDA DISINI
     window.open(`https://wa.me/${nomorAdmin}?text=${encodeURIComponent(msg)}`, '_blank');
     
     setTimeout(() => { if(confirm("Reset form?")) location.reload(); }, 1000);
