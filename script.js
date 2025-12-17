@@ -1,4 +1,4 @@
-const daftarBarang = ["Magnet Filter", "Magnet Mentol", "Rotama", "Amatoru", "SPR", "Bold", "Geboy"];
+const daftarBarang = ["Magnet Non-Mentol", "Magnet Mentol", "Rotama SPR","Rotama Extra", "Amatoru"];
 let pesanan = {};
 
 // Fungsi untuk membangun tampilan barang
