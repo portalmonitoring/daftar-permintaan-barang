@@ -24,6 +24,17 @@ function renderItems() {
     });
 }
 
+function ubQty(nama, delta) {
+    let q = pesanan[nama].qty + delta;
+    if (q >= 0) {
+        pesanan[nama].qty = q;
+        // Perubahan: Bal menjadi Bks
+        document.getElementById(`qty-${nama}`).innerText = q + " Bks";
+        updateTotal();
+    }
+}
+
+// Alias function karena pada HTML onclick memanggil ubahQty
 function ubahQty(nama, delta) {
     let q = pesanan[nama].qty + delta;
     if (q >= 0) {
@@ -38,6 +49,7 @@ function updateCatatan(n, t) { pesanan[n].catatan = t; }
 function updateTotal() {
     let t = 0;
     for (let k in pesanan) t += pesanan[k].qty;
+    // Perubahan: Bal menjadi Bks
     document.getElementById('totalLabel').innerText = `Kirim Pesanan (${t} Bks)`;
 }
 
@@ -65,12 +77,13 @@ function kirimWhatsApp() {
     for (let n in pesanan) {
         if (pesanan[n].qty > 0) {
             ada = true;
+            // Perubahan: Bal menjadi Bks
             msg += `📦 *${n}*: ${pesanan[n].qty} Bks\n${pesanan[n].catatan ? '   _Note: ' + pesanan[n].catatan + '_\n' : ''}`;
         }
     }
     if (!ada) return alert("Pilih barang!");
     
-    const nomorAdmin = "628990813403"; // GANTI NOMOR ANDA DISINI
+    const nomorAdmin = "628990813403"; 
     window.open(`https://wa.me/${nomorAdmin}?text=${encodeURIComponent(msg)}`, '_blank');
     
     setTimeout(() => { if(confirm("Reset form?")) location.reload(); }, 1000);
