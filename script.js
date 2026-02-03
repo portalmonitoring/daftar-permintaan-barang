@@ -1,9 +1,12 @@
 const hargaBarang = {
-    "Magnet Bold": 15000,
-    "Magnet Mentol": 15500,
-    "Rotama SPR": 8000,
-    "Rotama Extra": 8100,
-    "Amatoru": 9500
+    "Magnet (Filter)": 15000,
+    "Magnet Mentol (Filter)": 15500,
+    "Rotama SPR (Kretek)": 8500,
+    "Rotama Extra (Kretek)": 9000,
+    "Amatoru (Kretek)": 9500,
+    "Bawor (Kretek)": 6000,
+    "Teluk (Kretek)":6000,
+    
 };
 
 const daftarBarang = Object.keys(hargaBarang);
