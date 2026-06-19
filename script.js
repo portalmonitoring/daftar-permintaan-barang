@@ -108,7 +108,7 @@ function kirimWhatsApp() {
     msg += `💰 *TOTAL PEMBAYARAN: Rp ${totalHargaAkhir.toLocaleString('id-ID')}*\n\n`;
     msg += `*Pemohon:* ${loc}`;
     
-    const nomorAdmin = "628990813403"; 
+    const nomorAdmin = "6281802176976"; 
     window.open(`https://wa.me/${nomorAdmin}?text=${encodeURIComponent(msg)}`, '_blank');
     
     setTimeout(() => { 
